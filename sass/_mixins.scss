@@ -1,0 +1,68 @@
+$pratio : 1.5;
+
+@mixin border-top-right-radius($radius: $default-border-radius) {
+  @include border-corner-radius(top, right, $radius);
+}
+
+// Retina compability ================================================
+// ===================================================================
+@mixin retina-bg($image, $type) {
+    background-image: image-url($image+"."+$type);
+    @media only screen and (-webkit-min-device-pixel-ratio: $pratio),
+           only screen and (min--moz-device-pixel-ratio: $pratio),
+           only screen and (-o-min-device-pixel-ratio: #{$pratio}/1),
+           only screen and (min-resolution: #{round($pratio*96)}dpi),
+           only screen and (min-resolution: #{$pratio}dppx)
+    {
+        background-image : image-url($image+"_2x."+$type);
+        background-size: image-width($image+"."+$type) image-height($image+"."+$type);
+    }
+}
+
+@mixin pseudo-image-retina ($image, $type, $x : center, $y : center) {
+    position: relative;
+    &:after {
+        display: block;
+        content:'';
+        background: image-url($image+"."+$type) no-repeat;
+        width: image-width($image+"."+$type);
+        height: image-height($image+"."+$type);
+        position: absolute;
+        -webkit-background-size: 100%;
+        background-size: 100%;
+        @if $x == center {
+            left: 50%;
+            margin-left: -(image-width($image+"."+$type)/2);
+        } @else {
+            #{nth($x, 1)} : nth($x, 2);
+        }
+        @if $y == center {
+            top: 50%;
+            margin-top: -(image-height($image+"."+$type)/2);
+        } @else {
+            #{nth($y, 1)} : nth($y, 2);
+        }
+        @media only screen and (-webkit-min-device-pixel-ratio: $pratio),
+           only screen and (min--moz-device-pixel-ratio: $pratio),
+           only screen and (-o-min-device-pixel-ratio: #{$pratio}/1),
+           only screen and (min-resolution: #{round($pratio*96)}dpi),
+           only screen and (min-resolution: #{$pratio}dppx)
+        {
+            background-image : image-url($image+"_2x."+$type);
+            background-size: image-width($image+"."+$type) image-height($image+"."+$type);
+        }
+    }
+}
+
+@mixin retina-bg-mobile($image, $type, $m1 : $m) {
+    background-image: image-url($image+"."+$type);
+    @media (max-width:$m1) and  (-webkit-min-device-pixel-ratio: $pratio),
+           (max-width:$m1) and (min--moz-device-pixel-ratio: $pratio),
+           (max-width:$m1) and (-o-min-device-pixel-ratio: #{$pratio}/1),
+           (max-width:$m1) and (min-resolution: #{round($pratio*96)}dpi),
+           (max-width:$m1) and (min-resolution: #{$pratio}dppx)
+    {
+        background-image : image-url($image+"_2x."+$type);
+        background-size: image-width($image+"."+$type) image-height($image+"."+$type);
+    }
+}
